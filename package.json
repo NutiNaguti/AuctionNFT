@@ -1,5 +1,5 @@
 {
-  "name": "x-technology",
+  "name": "x-technology-test-task",
   "scripts": {
     "prettier": "prettier --write contracts/*.sol && prettier --write contracts/interfaces/*.sol",
     "coverage": "npx hardhat coverage",
@@ -14,6 +14,10 @@
   },
   "dependencies": {
     "@openzeppelin/contracts": "^4.7.2",
-    "@openzeppelin/contracts-upgradeable": "^4.7.2"
+    "@openzeppelin/contracts-upgradeable": "^4.7.2",
+    "@openzeppelin/hardhat-upgrades": "^1.20.0",
+    "dotenv": "^16.0.1",
+    "keccak256": "^1.0.6",
+    "merkletreejs": "^0.2.32"
   }
 }

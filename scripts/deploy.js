@@ -5,20 +5,25 @@
 // will compile your contracts, add the Hardhat Runtime Environment's members to the
 // global scope, and execute the script.
 const hre = require("hardhat");
+require("dotenv").config();
 
 async function main() {
-  const currentTimestampInSeconds = Math.round(Date.now() / 1000);
-  const ONE_YEAR_IN_SECS = 365 * 24 * 60 * 60;
-  const unlockTime = currentTimestampInSeconds + ONE_YEAR_IN_SECS;
+  let Blacklist = await ethers.getContractFactory("Blacklist");
+  let blacklist = await Blacklist.deploy();
 
-  const lockedAmount = hre.ethers.utils.parseEther("1");
+  let Assets = await ethers.getContractFactory("Assets");
+  let assets =  await upgrades.deployProxy(Assets, ["Assets", "ASSETS", process.env.BASE_URI, process.env.BASE_PRICE, process.env.ADDITIONAL_PRICE, blacklist.address]);
+  
+  let Treasury = await ethers.getContractFactory("Treasury");
+  let treasury = await Treasury.deploy(assets.address);
 
-  const Lock = await hre.ethers.getContractFactory("Lock");
-  const lock = await Lock.deploy(unlockTime, { value: lockedAmount });
+  let Auction = await ethers.getContractFactory("Auction");
+  let auction = await upgrades.deployProxy(Auction, [assets.address, treasury.address, blacklist.address]);
 
-  await lock.deployed();
-
-  console.log("Lock with 1 ETH deployed to:", lock.address);
+  console.log("blacklist address: ", blacklist.address);
+  console.log("assets address: ", assets.address);
+  console.log("treasury address: ", treasury.address);
+  console.log("auction address: ", auction.address);
 }
 
 // We recommend this pattern to be able to use async/await everywhere
