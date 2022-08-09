@@ -92,7 +92,10 @@ contract Auction is Initializable, PausableUpgradeable, OwnableUpgradeable {
             !_blacklist.isInBlacklist(msg.sender),
             "Auction: blacklisted user cannot sell"
         );
-        require(_lastBids[tokenId].time == 0, "Auction: this token already placed");
+        require(
+            _lastBids[tokenId].time == 0,
+            "Auction: this token already placed"
+        );
         _assets.lockToken(tokenId);
         _lastBids[tokenId] = Bid(
             uint32(block.timestamp),
@@ -170,7 +173,13 @@ contract Auction is Initializable, PausableUpgradeable, OwnableUpgradeable {
         tokensAmount--;
         _assets.unlockToken(tokenId);
         _assets.transferFrom(msg.sender, address(_treasury), tokenId);
-        _treasury.addNewPendingTrade(msg.sender, _lastBids[tokenId].user, tokenId, _lastBids[tokenId].time, _lastBids[tokenId].price);
+        _treasury.addNewPendingTrade(
+            msg.sender,
+            _lastBids[tokenId].user,
+            tokenId,
+            _lastBids[tokenId].time,
+            _lastBids[tokenId].price
+        );
         _deleteAssetData(tokenId);
     }
 
@@ -182,8 +191,14 @@ contract Auction is Initializable, PausableUpgradeable, OwnableUpgradeable {
             msg.value == _lastBids[tokenId].price,
             "Assets: not enougth ETH"
         );
-        require(_lastBids[tokenId].price == _initPrices[tokenId], "Auction: can only be purchased if no bids have been placed");
-        require(_lastBids[tokenId].user != msg.sender, "Auction: you tried to buy your token");
+        require(
+            _lastBids[tokenId].price == _initPrices[tokenId],
+            "Auction: can only be purchased if no bids have been placed"
+        );
+        require(
+            _lastBids[tokenId].user != msg.sender,
+            "Auction: you tried to buy your token"
+        );
         (bool sent, ) = _assetOwners[tokenId].call{
             value: msg.value - (msg.value / 100) * FEE
         }("Your token has been purchased");

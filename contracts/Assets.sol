@@ -139,10 +139,22 @@ contract Assets is
         _merkleRoot = newRoot;
     }
 
-    function tokenURI(uint256 tokenId) public virtual override view returns(string memory) {
-        require(_exists(tokenId), "ERC721Metadata: URI query for nonexistent token");
+    function tokenURI(uint256 tokenId)
+        public
+        view
+        virtual
+        override
+        returns (string memory)
+    {
+        require(
+            _exists(tokenId),
+            "ERC721Metadata: URI query for nonexistent token"
+        );
         string memory baseUri = _baseURI();
-        return bytes(baseUri).length > 0 ? string.concat(baseUri, tokenId.toString(), _uriSuffix) : "";
+        return
+            bytes(baseUri).length > 0
+                ? string.concat(baseUri, tokenId.toString(), _uriSuffix)
+                : "";
     }
 
     function _baseURI() internal view override returns (string memory) {
