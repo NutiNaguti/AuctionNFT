@@ -5,9 +5,12 @@ import "@openzeppelin/contracts-upgradeable/token/ERC721/IERC721Upgradeable.sol"
 
 interface IAssets is IERC721Upgradeable {
     struct Asset {
-        bytes content;
+        string content;
     }
+
     function lockToken(uint256 tokenId) external;
+
     function unlockToken(uint256 tokenId) external;
-    function isLock(uint256 tokenId) external view returns(bool);
+
+    function isLocked(uint256 tokenId) external view returns (bool);
 }
