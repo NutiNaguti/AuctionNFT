@@ -1,12 +1,10 @@
 // SPDX-License-Identifier: Unlicensed
 pragma solidity ^0.8.12;
 
-import "@openzeppelin/contracts/access/Ownable.sol";
+import "lib/openzeppelin-contracts/contracts/access/Ownable.sol";
 
 import "./interfaces/IAssets.sol";
 import "./interfaces/ITreasury.sol";
-
-import "hardhat/console.sol";
 
 contract Treasury is Ownable, ITreasury {
     IAssets private _assets;
